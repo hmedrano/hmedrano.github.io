@@ -197,9 +197,6 @@
                                 <a class="function" href="#ERDDAP_Griddap.loadMetadata">loadMetadata</a>
                         </li>
                         <li>
-                                <a class="function" href="#ERDDAP_Griddap.castTimeDimension">castTimeDimension</a>
-                        </li>
-                        <li>
                                 <a class="variable" href="#ERDDAP_Griddap.xarray">xarray</a>
                         </li>
                         <li>
@@ -1455,7 +1452,7 @@ Tabledap Dataset from ERDDAP. </p>
 
 
   <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">dataset_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataset_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
   <span class="k">def</span> <span class="nf">__simple_repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">simple_dataset_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1687,7 +1684,7 @@ Tabledap Dataset from ERDDAP. </p>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Clears all the query elements of the stack, variables, constraints and</span>
 <span class="sd">    server side variables.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearConstraints</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearServerSideFunctions</span><span class="p">()</span>
@@ -2290,7 +2287,7 @@ methods available, like <code><a href="#ERDDAP_Tabledap.orderBy">erddapClient.ER
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Clears all the query elements of the stack, variables, constraints and</span>
 <span class="sd">    server side variables.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearConstraints</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearServerSideFunctions</span><span class="p">()</span>
@@ -2388,7 +2385,7 @@ depending on the filetype specified in the query.</p>
 
   <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="n">dst_repr_</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">dst_repr_</span> <span class="o">+</span> <span class="n">tabledap_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dst_repr_</span> <span class="o">+</span> <span class="n">tabledap_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
   <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">():</span>
@@ -2409,7 +2406,7 @@ depending on the filetype specified in the query.</p>
 <span class="sd">    additional arguments for this method can be provided as kwargs in this</span>
 <span class="sd">    method.</span>
 
-<span class="sd">    Returns the pandas object.</span>
+<span class="sd">    Returns the pandas DataFrame object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">csvpdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="s1">&#39;csvp&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">csvpdata</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -2419,7 +2416,8 @@ depending on the filetype specified in the query.</p>
   <span class="c1"># </span>
   <span class="k">def</span> <span class="nf">addVariablesWhere</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributeName</span><span class="p">,</span> <span class="n">attributeValue</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">     https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#addVariablesWhere</span>
+<span class="sd">    Adds &quot;addVariablesWhere&quot; server side function to the data request query</span>
+<span class="sd">    [https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#addVariablesWhere](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#addVariablesWhere)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">serverSideFunctions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> 
       <span class="s1">&#39;addVariablesWhere(&quot;</span><span class="si">{}</span><span class="s1">&quot;,&quot;</span><span class="si">{}</span><span class="s1">&quot;)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attributeName</span><span class="p">,</span> <span class="n">attributeValue</span><span class="p">)</span> 
@@ -2428,7 +2426,8 @@ depending on the filetype specified in the query.</p>
 
   <span class="k">def</span> <span class="nf">distinct</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">     https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#distinct</span>
+<span class="sd">    Adds &quot;distinct&quot; server side function to the data request query</span>
+<span class="sd">    [https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#distinct](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#distinct)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">serverSideFunctions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="s1">&#39;distinct()&#39;</span> <span class="p">)</span>
     <span class="k">return</span> <span class="bp">self</span>
@@ -2605,7 +2604,7 @@ page of the dataset.</p>
 <span class="sd">    additional arguments for this method can be provided as kwargs in this</span>
 <span class="sd">    method.</span>
 
-<span class="sd">    Returns the pandas object.</span>
+<span class="sd">    Returns the pandas DataFrame object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">csvpdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="s1">&#39;csvp&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">csvpdata</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -2620,7 +2619,7 @@ then convert it to a pandas object. </p>
 additional arguments for this method can be provided as kwargs in this
 method.</p>
 
-<p>Returns the pandas object.</p>
+<p>Returns the pandas DataFrame object.</p>
 </div>
 
 
@@ -2637,7 +2636,8 @@ method.</p>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">addVariablesWhere</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributeName</span><span class="p">,</span> <span class="n">attributeValue</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">     https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#addVariablesWhere</span>
+<span class="sd">    Adds &quot;addVariablesWhere&quot; server side function to the data request query</span>
+<span class="sd">    [https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#addVariablesWhere](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#addVariablesWhere)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">serverSideFunctions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> 
       <span class="s1">&#39;addVariablesWhere(&quot;</span><span class="si">{}</span><span class="s1">&quot;,&quot;</span><span class="si">{}</span><span class="s1">&quot;)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attributeName</span><span class="p">,</span> <span class="n">attributeValue</span><span class="p">)</span> 
@@ -2647,7 +2647,8 @@ method.</p>
 
         </details>
 
-            <div class="docstring"><p>https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#addVariablesWhere</p>
+            <div class="docstring"><p>Adds "addVariablesWhere" server side function to the data request query
+<a href="https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#addVariablesWhere">https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#addVariablesWhere</a></p>
 </div>
 
 
@@ -2664,7 +2665,8 @@ method.</p>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">distinct</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">     https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#distinct</span>
+<span class="sd">    Adds &quot;distinct&quot; server side function to the data request query</span>
+<span class="sd">    [https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#distinct](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#distinct)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">serverSideFunctions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="s1">&#39;distinct()&#39;</span> <span class="p">)</span>
     <span class="k">return</span> <span class="bp">self</span>
@@ -2672,7 +2674,8 @@ method.</p>
 
         </details>
 
-            <div class="docstring"><p>https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#distinct</p>
+            <div class="docstring"><p>Adds "distinct" server side function to the data request query
+<a href="https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#distinct">https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#distinct</a></p>
 </div>
 
 
@@ -2970,21 +2973,26 @@ method.</p>
   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lazyload</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="s1">&#39;griddap&#39;</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">lazyload</span><span class="o">=</span><span class="n">lazyload</span><span class="p">)</span>
 
-  <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="n">dst_repr_</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">dst_repr_</span> <span class="o">+</span> <span class="n">griddap_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+  <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">dst_repr_</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">dst_repr_</span> <span class="o">+</span> <span class="n">griddap_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
   <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">():</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">castTimeDimension</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_castTimeDimension</span><span class="p">()</span>
 
-  <span class="k">def</span> <span class="nf">castTimeDimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">_castTimeDimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">dimName</span><span class="p">,</span> <span class="n">dimAtts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
       <span class="k">if</span> <span class="s1">&#39;_CoordinateAxisType&#39;</span> <span class="ow">in</span> <span class="n">dimAtts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;_CoordinateAxisType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Time&#39;</span><span class="p">:</span>
         <span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">castTimeRangeAttribute</span><span class="p">(</span><span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">],</span> <span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
 
   <span class="nd">@property</span>
   <span class="k">def</span> <span class="nf">xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the xarray object representation of the dataset. Ths method creates the</span>
+<span class="sd">    xarray object by calling the open_dataset method and connecting to the </span>
+<span class="sd">    opendap endpoint that ERDDAP provides.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;__xarray&#39;</span><span class="p">):</span>      
       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">:</span>
         <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
@@ -2998,6 +3006,11 @@ method.</p>
 
   <span class="nd">@property</span>
   <span class="k">def</span> <span class="nf">ncDataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the netCDF4.Dataset object representation of the dataset. Ths method</span>
+<span class="sd">    creates the Dataset object by calling the Dataset constructor connecting </span>
+<span class="sd">    to the opendap endpoint that ERDDAP provides.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;__netcdf4Dataset&#39;</span><span class="p">):</span>      
       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">:</span>
         <span class="c1"># Add user, password in URL</span>
@@ -3052,7 +3065,7 @@ either a griddap or tabledap.</p>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">():</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">castTimeDimension</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_castTimeDimension</span><span class="p">()</span>
 </pre></div>
 
         </details>
@@ -3063,34 +3076,17 @@ page of the dataset.</p>
 
 
                             </div>
-                            <div id="ERDDAP_Griddap.castTimeDimension" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Griddap.castTimeDimension">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">castTimeDimension</span><span class="signature">(self)</span>:
-    </div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">castTimeDimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">dimName</span><span class="p">,</span> <span class="n">dimAtts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-      <span class="k">if</span> <span class="s1">&#39;_CoordinateAxisType&#39;</span> <span class="ow">in</span> <span class="n">dimAtts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;_CoordinateAxisType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Time&#39;</span><span class="p">:</span>
-        <span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">castTimeRangeAttribute</span><span class="p">(</span><span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">],</span> <span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
-</pre></div>
-
-        </details>
-
-    
-
-                            </div>
                             <div id="ERDDAP_Griddap.xarray" class="classattr">
                                             <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap.xarray">#&nbsp;&nbsp</a>
 
         <span class="name">xarray</span>
     </div>
 
-    
+            <div class="docstring"><p>Returns the xarray object representation of the dataset. Ths method creates the
+xarray object by calling the open_dataset method and connecting to the 
+opendap endpoint that ERDDAP provides.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Griddap.ncDataset" class="classattr">
@@ -3099,7 +3095,11 @@ page of the dataset.</p>
         <span class="name">ncDataset</span>
     </div>
 
-    
+            <div class="docstring"><p>Returns the netCDF4.Dataset object representation of the dataset. Ths method
+creates the Dataset object by calling the Dataset constructor connecting 
+to the opendap endpoint that ERDDAP provides.</p>
+</div>
+
 
                             </div>
                             <div class="inherited">
