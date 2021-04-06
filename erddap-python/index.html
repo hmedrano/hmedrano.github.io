@@ -143,9 +143,6 @@
                                 <a class="function" href="#ERDDAP_Tabledap.loadMetadata">loadMetadata</a>
                         </li>
                         <li>
-                                <a class="function" href="#ERDDAP_Tabledap.castTimeVariable">castTimeVariable</a>
-                        </li>
-                        <li>
                                 <a class="function" href="#ERDDAP_Tabledap.getDataFrame">getDataFrame</a>
                         </li>
                         <li>
@@ -1465,6 +1462,23 @@ Tabledap Dataset from ERDDAP. </p>
   
 
   <span class="k">def</span> <span class="nf">setResultVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function sets the optional comma-separated list of variables </span>
+<span class="sd">    called &quot;resultsVariables&quot; as part of the query for data request.</span>
+<span class="sd">    (for example: longitude,latitude,time,station,wmo_platform_code,T_25).</span>
+<span class="sd">    For each variable in resultsVariables, there will be a column in the </span>
+<span class="sd">    results table, in the same order. If you don&#39;t specify any results </span>
+<span class="sd">    variables, the results table will include columns for all of the </span>
+<span class="sd">    variables in the dataset.</span>
+
+<span class="sd">    Arguments</span>
+
+<span class="sd">    `variables` : The list of variables, this can be a string with the </span>
+<span class="sd">                  comma separated variables, or a list.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns the current object allowing chaining functions.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span> <span class="o">=</span> <span class="n">variables</span> 
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
@@ -1476,11 +1490,24 @@ Tabledap Dataset from ERDDAP. </p>
 
 
   <span class="k">def</span> <span class="nf">addResultVariable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds a variable to the data request query element &quot;resultsVariables&quot;</span>
+
+<span class="sd">    Arguments</span>
+
+<span class="sd">    `variable` : A string with the variable name add.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">self</span>
 
 
   <span class="k">def</span> <span class="nf">setConstraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraintListOrDict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This functions sets the constraints for the data request query.</span>
+
+<span class="sd">    More on ERDDAP constraints: https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#query</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearConstraints</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">addConstraints</span><span class="p">(</span><span class="n">constraintListOrDict</span><span class="p">)</span>
 
@@ -1497,7 +1524,24 @@ Tabledap Dataset from ERDDAP. </p>
     <span class="k">return</span> <span class="bp">self</span>
 
 
-  <span class="k">def</span> <span class="nf">addConstraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint</span><span class="p">):</span>    
+  <span class="k">def</span> <span class="nf">addConstraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This adds a constraint to the data request query.</span>
+
+<span class="sd">    Arguments</span>
+
+<span class="sd">    `constraint` : This can be a string with the constraint, or a dictionary</span>
+<span class="sd">                   element, being the key the first part of the constraint, and </span>
+<span class="sd">                   the dict value the constraint value.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    ```</span>
+<span class="sd">    &gt;&gt;&gt; dataset.addConstraint(&#39;time&gt;=2020-12-29T00:00:00Z&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; dataset.addConstraint({ &#39;time&gt;=&#39; : dt.datetime(2020,12,29) })</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    More on ERDDAP constraints: https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#query</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">_addConstraintDict</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
@@ -1541,6 +1585,10 @@ Tabledap Dataset from ERDDAP. </p>
   
   
   <span class="k">def</span> <span class="nf">getURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="n">DEFAULT_FILETYPE</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Buils and returns a strint with the data request query, with the available</span>
+<span class="sd">    resultsVariables, constraints and operations provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDataRequestURL</span><span class="p">(</span><span class="n">filetype</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="p">)</span>
 
 
@@ -1552,6 +1600,12 @@ Tabledap Dataset from ERDDAP. </p>
     
 
   <span class="k">def</span> <span class="nf">getAttribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">variableName</span><span class="o">=</span><span class="s1">&#39;NC_GLOBAL&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the value for a attribute name in the dataset. If the metadata of the</span>
+<span class="sd">    dataset is not already in memory, this functions will load it, calling the</span>
+<span class="sd">    function `erddapClient.ERDDAP_Dataset.loadMetadata`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">variableName</span> <span class="o">==</span> <span class="s1">&#39;NC_GLOBAL&#39;</span><span class="p">:</span>
       <span class="k">if</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span><span class="p">[</span><span class="s1">&#39;global&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1564,6 +1618,10 @@ Tabledap Dataset from ERDDAP. </p>
 
 
   <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads in to memory the metadata atributes and values available in the info</span>
+<span class="sd">    page of the dataset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
       <span class="n">rawRequest</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMetadataURL</span><span class="p">(),</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">)</span>
       <span class="n">rawRequestJson</span> <span class="o">=</span> <span class="n">rawRequest</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
@@ -1584,28 +1642,70 @@ Tabledap Dataset from ERDDAP. </p>
 
 
   <span class="k">def</span> <span class="nf">getMetadataURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a string with the url to request the metadata for the dataset.</span>
+
+<span class="sd">    Arguments</span>
+
+<span class="sd">    `filetype` : The filetype for the metadata request, defaults to &#39;json&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span> 
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">,</span> <span class="s2">&quot;index.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
 
 
   <span class="k">def</span> <span class="nf">clearConstraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clears from the constrains stack all the constraints provided by the </span>
+<span class="sd">    `erddapClient.ERDDAP_Dataset.setConstraints`, `erddapClient.ERDDAP_Dataset.addConstraint`</span>
+<span class="sd">    methods. </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="p">[]</span>
   
 
   <span class="k">def</span> <span class="nf">clearServerSideFunctions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clears from the server side functions stack all the functions provided by the </span>
+<span class="sd">    methods available, like `erddapClient.ERDDAP_Tabledap.orderBy`, </span>
+<span class="sd">    `erddapClient.ERDDAP_Tabledap.orderByClosest`, etc.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
     <span class="bp">self</span><span class="o">.</span><span class="n">serverSideFunctions</span> <span class="o">=</span> <span class="p">[]</span>
   
 
   <span class="k">def</span> <span class="nf">clearResultVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clears from the results variables stack all the variabkles provided by the </span>
+<span class="sd">    `erddapClient.ERDDAP_Dataset.setResultsVariables` and </span>
+<span class="sd">    `erddapClient.ERDDAP_Dataset.addResultVariable` methods</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>       
     <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span> <span class="o">=</span> <span class="p">[]</span>
 
 
   <span class="k">def</span> <span class="nf">clearQuery</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clears all the query elements of the stack, variables, constraints and</span>
+<span class="sd">    server side variables.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearConstraints</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearServerSideFunctions</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearResultVariables</span><span class="p">()</span>
 
 
   <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="n">DEFAULT_FILETYPE</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Makes a data request to the ERDDAP server, the request url is build</span>
+<span class="sd">    using the `erddapClient.ERDDAP_Dataset.getURL` function. </span>
+
+<span class="sd">    Aditional request arguments for the urlread function can be provided</span>
+<span class="sd">    as kwargs in this function.</span>
+
+<span class="sd">    Returns either a string or a binary format (`erddapClient.ERDDAP_Dataset.BINARY_FILETYPES`) </span>
+<span class="sd">    depending on the filetype specified in the query.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rawRequest</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getDataRequestURL</span><span class="p">(</span><span class="n">filetype</span><span class="p">),</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">filetype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">BINARY_FILETYPES</span><span class="p">:</span>
       <span class="k">return</span> <span class="n">rawRequest</span><span class="o">.</span><span class="n">content</span>
@@ -1685,6 +1785,23 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">setResultVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function sets the optional comma-separated list of variables </span>
+<span class="sd">    called &quot;resultsVariables&quot; as part of the query for data request.</span>
+<span class="sd">    (for example: longitude,latitude,time,station,wmo_platform_code,T_25).</span>
+<span class="sd">    For each variable in resultsVariables, there will be a column in the </span>
+<span class="sd">    results table, in the same order. If you don&#39;t specify any results </span>
+<span class="sd">    variables, the results table will include columns for all of the </span>
+<span class="sd">    variables in the dataset.</span>
+
+<span class="sd">    Arguments</span>
+
+<span class="sd">    `variables` : The list of variables, this can be a string with the </span>
+<span class="sd">                  comma separated variables, or a list.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns the current object allowing chaining functions.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span> <span class="o">=</span> <span class="n">variables</span> 
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
@@ -1697,7 +1814,22 @@ either a griddap or tabledap.</p>
 
         </details>
 
-    
+            <div class="docstring"><p>This function sets the optional comma-separated list of variables 
+called "resultsVariables" as part of the query for data request.
+(for example: longitude,latitude,time,station,wmo_platform_code,T_25).
+For each variable in resultsVariables, there will be a column in the 
+results table, in the same order. If you don't specify any results 
+variables, the results table will include columns for all of the 
+variables in the dataset.</p>
+
+<p>Arguments</p>
+
+<p><code><a href="#ERDDAP_Dataset.variables">variables</a></code> : The list of variables, this can be a string with the 
+              comma separated variables, or a list.</p>
+
+<p>Returns the current object allowing chaining functions.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.addResultVariable" class="classattr">
@@ -1711,13 +1843,26 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">addResultVariable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds a variable to the data request query element &quot;resultsVariables&quot;</span>
+
+<span class="sd">    Arguments</span>
+
+<span class="sd">    `variable` : A string with the variable name add.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">self</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Adds a variable to the data request query element "resultsVariables"</p>
+
+<p>Arguments</p>
+
+<p><code>variable</code> : A string with the variable name add.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.setConstraints" class="classattr">
@@ -1731,13 +1876,23 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">setConstraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraintListOrDict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This functions sets the constraints for the data request query.</span>
+
+<span class="sd">    More on ERDDAP constraints: https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#query</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearConstraints</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">addConstraints</span><span class="p">(</span><span class="n">constraintListOrDict</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>This functions sets the constraints for the data request query.</p>
+
+<p>More on ERDDAP constraints: https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#query</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.addConstraints" class="classattr">
@@ -1777,7 +1932,24 @@ either a griddap or tabledap.</p>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">addConstraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint</span><span class="p">):</span>    
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">addConstraint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This adds a constraint to the data request query.</span>
+
+<span class="sd">    Arguments</span>
+
+<span class="sd">    `constraint` : This can be a string with the constraint, or a dictionary</span>
+<span class="sd">                   element, being the key the first part of the constraint, and </span>
+<span class="sd">                   the dict value the constraint value.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    ```</span>
+<span class="sd">    &gt;&gt;&gt; dataset.addConstraint(&#39;time&gt;=2020-12-29T00:00:00Z&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; dataset.addConstraint({ &#39;time&gt;=&#39; : dt.datetime(2020,12,29) })</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    More on ERDDAP constraints: https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#query</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">_addConstraintDict</span><span class="p">(</span><span class="n">constraint</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constraint</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
@@ -1789,7 +1961,23 @@ either a griddap or tabledap.</p>
 
         </details>
 
-    
+            <div class="docstring"><p>This adds a constraint to the data request query.</p>
+
+<p>Arguments</p>
+
+<p><code>constraint</code> : This can be a string with the constraint, or a dictionary
+               element, being the key the first part of the constraint, and 
+               the dict value the constraint value.</p>
+
+<p>Example:</p>
+
+<pre><code>&gt;&gt;&gt; dataset.addConstraint('time&gt;=2020-12-29T00:00:00Z')
+&gt;&gt;&gt; dataset.addConstraint({ 'time&gt;=' : dt.datetime(2020,12,29) })
+</code></pre>
+
+<p>More on ERDDAP constraints: https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#query</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.getDataRequestURL" class="classattr">
@@ -1837,12 +2025,19 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="n">DEFAULT_FILETYPE</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Buils and returns a strint with the data request query, with the available</span>
+<span class="sd">    resultsVariables, constraints and operations provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDataRequestURL</span><span class="p">(</span><span class="n">filetype</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Buils and returns a strint with the data request query, with the available
+resultsVariables, constraints and operations provided.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.getBaseURL" class="classattr">
@@ -1878,6 +2073,12 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getAttribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">variableName</span><span class="o">=</span><span class="s1">&#39;NC_GLOBAL&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the value for a attribute name in the dataset. If the metadata of the</span>
+<span class="sd">    dataset is not already in memory, this functions will load it, calling the</span>
+<span class="sd">    function `erddapClient.ERDDAP_Dataset.loadMetadata`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">variableName</span> <span class="o">==</span> <span class="s1">&#39;NC_GLOBAL&#39;</span><span class="p">:</span>
       <span class="k">if</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span><span class="p">[</span><span class="s1">&#39;global&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1891,7 +2092,11 @@ either a griddap or tabledap.</p>
 
         </details>
 
-    
+            <div class="docstring"><p>Returns the value for a attribute name in the dataset. If the metadata of the
+dataset is not already in memory, this functions will load it, calling the
+function <code><a href="#ERDDAP_Dataset.loadMetadata">erddapClient.ERDDAP_Dataset.loadMetadata</a></code></p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.loadMetadata" class="classattr">
@@ -1905,6 +2110,10 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads in to memory the metadata atributes and values available in the info</span>
+<span class="sd">    page of the dataset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
       <span class="n">rawRequest</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMetadataURL</span><span class="p">(),</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">)</span>
       <span class="n">rawRequestJson</span> <span class="o">=</span> <span class="n">rawRequest</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
@@ -1914,7 +2123,10 @@ either a griddap or tabledap.</p>
 
         </details>
 
-    
+            <div class="docstring"><p>Loads in to memory the metadata atributes and values available in the info
+page of the dataset.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.variables" class="classattr">
@@ -1955,12 +2167,26 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getMetadataURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a string with the url to request the metadata for the dataset.</span>
+
+<span class="sd">    Arguments</span>
+
+<span class="sd">    `filetype` : The filetype for the metadata request, defaults to &#39;json&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span> 
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">,</span> <span class="s2">&quot;index.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Returns a string with the url to request the metadata for the dataset.</p>
+
+<p>Arguments</p>
+
+<p><code>filetype</code> : The filetype for the metadata request, defaults to 'json'</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.clearConstraints" class="classattr">
@@ -1974,12 +2200,22 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">clearConstraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clears from the constrains stack all the constraints provided by the </span>
+<span class="sd">    `erddapClient.ERDDAP_Dataset.setConstraints`, `erddapClient.ERDDAP_Dataset.addConstraint`</span>
+<span class="sd">    methods. </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="p">[]</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Clears from the constrains stack all the constraints provided by the 
+<code><a href="#ERDDAP_Dataset.setConstraints">erddapClient.ERDDAP_Dataset.setConstraints</a></code>, <code><a href="#ERDDAP_Dataset.addConstraint">erddapClient.ERDDAP_Dataset.addConstraint</a></code>
+methods.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.clearServerSideFunctions" class="classattr">
@@ -1993,12 +2229,22 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">clearServerSideFunctions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clears from the server side functions stack all the functions provided by the </span>
+<span class="sd">    methods available, like `erddapClient.ERDDAP_Tabledap.orderBy`, </span>
+<span class="sd">    `erddapClient.ERDDAP_Tabledap.orderByClosest`, etc.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
     <span class="bp">self</span><span class="o">.</span><span class="n">serverSideFunctions</span> <span class="o">=</span> <span class="p">[]</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Clears from the server side functions stack all the functions provided by the 
+methods available, like <code><a href="#ERDDAP_Tabledap.orderBy">erddapClient.ERDDAP_Tabledap.orderBy</a></code>, 
+<code><a href="#ERDDAP_Tabledap.orderByClosest">erddapClient.ERDDAP_Tabledap.orderByClosest</a></code>, etc.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.clearResultVariables" class="classattr">
@@ -2012,12 +2258,22 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">clearResultVariables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clears from the results variables stack all the variabkles provided by the </span>
+<span class="sd">    `erddapClient.ERDDAP_Dataset.setResultsVariables` and </span>
+<span class="sd">    `erddapClient.ERDDAP_Dataset.addResultVariable` methods</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>       
     <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span> <span class="o">=</span> <span class="p">[]</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Clears from the results variables stack all the variabkles provided by the 
+<code><a href="#ERDDAP_Dataset.setResultsVariables">erddapClient.ERDDAP_Dataset.setResultsVariables</a></code> and 
+<code><a href="#ERDDAP_Dataset.addResultVariable">erddapClient.ERDDAP_Dataset.addResultVariable</a></code> methods</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.clearQuery" class="classattr">
@@ -2031,6 +2287,11 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">clearQuery</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clears all the query elements of the stack, variables, constraints and</span>
+<span class="sd">    server side variables.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearConstraints</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearServerSideFunctions</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">clearResultVariables</span><span class="p">()</span>
@@ -2038,7 +2299,10 @@ either a griddap or tabledap.</p>
 
         </details>
 
-    
+            <div class="docstring"><p>Clears all the query elements of the stack, variables, constraints and
+server side variables.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Dataset.getData" class="classattr">
@@ -2052,6 +2316,17 @@ either a griddap or tabledap.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="n">DEFAULT_FILETYPE</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Makes a data request to the ERDDAP server, the request url is build</span>
+<span class="sd">    using the `erddapClient.ERDDAP_Dataset.getURL` function. </span>
+
+<span class="sd">    Aditional request arguments for the urlread function can be provided</span>
+<span class="sd">    as kwargs in this function.</span>
+
+<span class="sd">    Returns either a string or a binary format (`erddapClient.ERDDAP_Dataset.BINARY_FILETYPES`) </span>
+<span class="sd">    depending on the filetype specified in the query.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rawRequest</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getDataRequestURL</span><span class="p">(</span><span class="n">filetype</span><span class="p">),</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">filetype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">BINARY_FILETYPES</span><span class="p">:</span>
       <span class="k">return</span> <span class="n">rawRequest</span><span class="o">.</span><span class="n">content</span>
@@ -2061,7 +2336,16 @@ either a griddap or tabledap.</p>
 
         </details>
 
-    
+            <div class="docstring"><p>Makes a data request to the ERDDAP server, the request url is build
+using the <code><a href="#ERDDAP_Dataset.getURL">erddapClient.ERDDAP_Dataset.getURL</a></code> function. </p>
+
+<p>Aditional request arguments for the urlread function can be provided
+as kwargs in this function.</p>
+
+<p>Returns either a string or a binary format (<code><a href="#ERDDAP_Dataset.BINARY_FILETYPES">erddapClient.ERDDAP_Dataset.BINARY_FILETYPES</a></code>) 
+depending on the filetype specified in the query.</p>
+</div>
+
 
                             </div>
                 </section>
@@ -2091,9 +2375,12 @@ either a griddap or tabledap.</p>
 
 <span class="sd">    Arguments:</span>
 
-<span class="sd">    `url` : The url of the ERDDAP Server that contains the tabledap dataset</span>
-<span class="sd">    `datasetid` : The identifier of the dataset</span>
+<span class="sd">    `url` : The url of the ERDDAP Server that contains the tabledap dataset.</span>
+
+<span class="sd">    `datasetid` : The identifier of the dataset.</span>
+
 <span class="sd">    `auth` : Tupple with username and password for a protected ERDDAP Server.</span>
+
 <span class="sd">    `lazyload` : If false calls the loadMetadata method.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2105,15 +2392,25 @@ either a griddap or tabledap.</p>
 
   <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">():</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">castTimeVariable</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_castTimeVariable</span><span class="p">()</span>
 
-  <span class="k">def</span> <span class="nf">castTimeVariable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">_castTimeVariable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">varName</span><span class="p">,</span> <span class="n">varAtts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
       <span class="k">if</span> <span class="s1">&#39;_CoordinateAxisType&#39;</span> <span class="ow">in</span> <span class="n">varAtts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;_CoordinateAxisType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Time&#39;</span><span class="p">:</span>
         <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">castTimeRangeAttribute</span><span class="p">(</span><span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">],</span> <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
 
 
   <span class="k">def</span> <span class="nf">getDataFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method makes a data request to the ERDDAP server in csv format</span>
+<span class="sd">    then convert it to a pandas object. </span>
+<span class="sd">    </span>
+<span class="sd">    The pandas object is created using the read_csv method, and </span>
+<span class="sd">    additional arguments for this method can be provided as kwargs in this</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Returns the pandas object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">csvpdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="s1">&#39;csvp&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">csvpdata</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -2227,9 +2524,12 @@ either a griddap or tabledap.</p>
 
 <span class="sd">    Arguments:</span>
 
-<span class="sd">    `url` : The url of the ERDDAP Server that contains the tabledap dataset</span>
-<span class="sd">    `datasetid` : The identifier of the dataset</span>
+<span class="sd">    `url` : The url of the ERDDAP Server that contains the tabledap dataset.</span>
+
+<span class="sd">    `datasetid` : The identifier of the dataset.</span>
+
 <span class="sd">    `auth` : Tupple with username and password for a protected ERDDAP Server.</span>
+
 <span class="sd">    `lazyload` : If false calls the loadMetadata method.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2243,10 +2543,13 @@ the metadata information of the dataset.</p>
 
 <p>Arguments:</p>
 
-<p><code>url</code> : The url of the ERDDAP Server that contains the tabledap dataset
-<code>datasetid</code> : The identifier of the dataset
-<code>auth</code> : Tupple with username and password for a protected ERDDAP Server.
-<code>lazyload</code> : If false calls the loadMetadata method.</p>
+<p><code>url</code> : The url of the ERDDAP Server that contains the tabledap dataset.</p>
+
+<p><code>datasetid</code> : The identifier of the dataset.</p>
+
+<p><code>auth</code> : Tupple with username and password for a protected ERDDAP Server.</p>
+
+<p><code>lazyload</code> : If false calls the loadMetadata method.</p>
 </div>
 
 
@@ -2272,33 +2575,15 @@ the metadata information of the dataset.</p>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">():</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">castTimeVariable</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_castTimeVariable</span><span class="p">()</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Loads in to memory the metadata atributes and values available in the info
+page of the dataset.</p>
+</div>
 
-                            </div>
-                            <div id="ERDDAP_Tabledap.castTimeVariable" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Tabledap.castTimeVariable">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">castTimeVariable</span><span class="signature">(self)</span>:
-    </div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">castTimeVariable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">varName</span><span class="p">,</span> <span class="n">varAtts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-      <span class="k">if</span> <span class="s1">&#39;_CoordinateAxisType&#39;</span> <span class="ow">in</span> <span class="n">varAtts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;_CoordinateAxisType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Time&#39;</span><span class="p">:</span>
-        <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">castTimeRangeAttribute</span><span class="p">(</span><span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">],</span> <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
-</pre></div>
-
-        </details>
-
-    
 
                             </div>
                             <div id="ERDDAP_Tabledap.getDataFrame" class="classattr">
@@ -2312,13 +2597,32 @@ the metadata information of the dataset.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getDataFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method makes a data request to the ERDDAP server in csv format</span>
+<span class="sd">    then convert it to a pandas object. </span>
+<span class="sd">    </span>
+<span class="sd">    The pandas object is created using the read_csv method, and </span>
+<span class="sd">    additional arguments for this method can be provided as kwargs in this</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Returns the pandas object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">csvpdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="s1">&#39;csvp&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">csvpdata</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>This method makes a data request to the ERDDAP server in csv format
+then convert it to a pandas object. </p>
+
+<p>The pandas object is created using the read_csv method, and 
+additional arguments for this method can be provided as kwargs in this
+method.</p>
+
+<p>Returns the pandas object.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Tabledap.addVariablesWhere" class="classattr">
@@ -2753,7 +3057,10 @@ either a griddap or tabledap.</p>
 
         </details>
 
-    
+            <div class="docstring"><p>Loads in to memory the metadata atributes and values available in the info
+page of the dataset.</p>
+</div>
+
 
                             </div>
                             <div id="ERDDAP_Griddap.castTimeDimension" class="classattr">
