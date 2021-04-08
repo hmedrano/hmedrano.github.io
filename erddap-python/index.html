@@ -127,6 +127,9 @@
                         <li>
                                 <a class="function" href="#ERDDAP_Dataset.getData">getData</a>
                         </li>
+                        <li>
+                                <a class="function" href="#ERDDAP_Dataset.getDataFrame">getDataFrame</a>
+                        </li>
                 </ul>
 
             </li>
@@ -141,9 +144,6 @@
                         </li>
                         <li>
                                 <a class="function" href="#ERDDAP_Tabledap.loadMetadata">loadMetadata</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#ERDDAP_Tabledap.getDataFrame">getDataFrame</a>
                         </li>
                         <li>
                                 <a class="function" href="#ERDDAP_Tabledap.addVariablesWhere">addVariablesWhere</a>
@@ -1708,6 +1708,20 @@ Tabledap Dataset from ERDDAP. </p>
       <span class="k">return</span> <span class="n">rawRequest</span><span class="o">.</span><span class="n">content</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="k">return</span> <span class="n">rawRequest</span><span class="o">.</span><span class="n">text</span>
+
+  <span class="k">def</span> <span class="nf">getDataFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method makes a data request to the ERDDAP server in csv format</span>
+<span class="sd">    then convert it to a pandas object. </span>
+<span class="sd">    </span>
+<span class="sd">    The pandas object is created using the read_csv method, and </span>
+<span class="sd">    additional arguments for this method can be provided as kwargs in this</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Returns the pandas DataFrame object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">csvpdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="s1">&#39;csvp&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">csvpdata</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 
         </details>
@@ -2345,6 +2359,45 @@ depending on the filetype specified in the query.</p>
 
 
                             </div>
+                            <div id="ERDDAP_Dataset.getDataFrame" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Dataset.getDataFrame">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">getDataFrame</span><span class="signature">(self, request_kwargs={}, **kwargs)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getDataFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method makes a data request to the ERDDAP server in csv format</span>
+<span class="sd">    then convert it to a pandas object. </span>
+<span class="sd">    </span>
+<span class="sd">    The pandas object is created using the read_csv method, and </span>
+<span class="sd">    additional arguments for this method can be provided as kwargs in this</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Returns the pandas DataFrame object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">csvpdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="s1">&#39;csvp&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">csvpdata</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This method makes a data request to the ERDDAP server in csv format
+then convert it to a pandas object. </p>
+
+<p>The pandas object is created using the read_csv method, and 
+additional arguments for this method can be provided as kwargs in this
+method.</p>
+
+<p>Returns the pandas DataFrame object.</p>
+</div>
+
+
+                            </div>
                 </section>
                 <section id="ERDDAP_Tabledap">
                                 <div class="attr class">
@@ -2396,20 +2449,6 @@ depending on the filetype specified in the query.</p>
       <span class="k">if</span> <span class="s1">&#39;_CoordinateAxisType&#39;</span> <span class="ow">in</span> <span class="n">varAtts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;_CoordinateAxisType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Time&#39;</span><span class="p">:</span>
         <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">castTimeRangeAttribute</span><span class="p">(</span><span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">],</span> <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
 
-
-  <span class="k">def</span> <span class="nf">getDataFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This method makes a data request to the ERDDAP server in csv format</span>
-<span class="sd">    then convert it to a pandas object. </span>
-<span class="sd">    </span>
-<span class="sd">    The pandas object is created using the read_csv method, and </span>
-<span class="sd">    additional arguments for this method can be provided as kwargs in this</span>
-<span class="sd">    method.</span>
-
-<span class="sd">    Returns the pandas DataFrame object.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">csvpdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="s1">&#39;csvp&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">csvpdata</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
   <span class="c1"># </span>
   <span class="c1"># Tabledap server side functions wrappers</span>
@@ -2581,45 +2620,6 @@ the metadata information of the dataset.</p>
 
             <div class="docstring"><p>Loads in to memory the metadata atributes and values available in the info
 page of the dataset.</p>
-</div>
-
-
-                            </div>
-                            <div id="ERDDAP_Tabledap.getDataFrame" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Tabledap.getDataFrame">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">getDataFrame</span><span class="signature">(self, request_kwargs={}, **kwargs)</span>:
-    </div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getDataFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This method makes a data request to the ERDDAP server in csv format</span>
-<span class="sd">    then convert it to a pandas object. </span>
-<span class="sd">    </span>
-<span class="sd">    The pandas object is created using the read_csv method, and </span>
-<span class="sd">    additional arguments for this method can be provided as kwargs in this</span>
-<span class="sd">    method.</span>
-
-<span class="sd">    Returns the pandas DataFrame object.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">csvpdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getData</span><span class="p">(</span><span class="s1">&#39;csvp&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">csvpdata</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>This method makes a data request to the ERDDAP server in csv format
-then convert it to a pandas object. </p>
-
-<p>The pandas object is created using the read_csv method, and 
-additional arguments for this method can be provided as kwargs in this
-method.</p>
-
-<p>Returns the pandas DataFrame object.</p>
 </div>
 
 
@@ -2950,6 +2950,7 @@ method.</p>
                 <dd id="ERDDAP_Tabledap.clearResultVariables" class="function">clearResultVariables</dd>
                 <dd id="ERDDAP_Tabledap.clearQuery" class="function">clearQuery</dd>
                 <dd id="ERDDAP_Tabledap.getData" class="function">getData</dd>
+                <dd id="ERDDAP_Tabledap.getDataFrame" class="function">getDataFrame</dd>
 
             </div>
                                 </dl>
@@ -3125,6 +3126,7 @@ to the opendap endpoint that ERDDAP provides.</p>
                 <dd id="ERDDAP_Griddap.clearResultVariables" class="function">clearResultVariables</dd>
                 <dd id="ERDDAP_Griddap.clearQuery" class="function">clearQuery</dd>
                 <dd id="ERDDAP_Griddap.getData" class="function">getData</dd>
+                <dd id="ERDDAP_Griddap.getDataFrame" class="function">getDataFrame</dd>
 
             </div>
                                 </dl>
