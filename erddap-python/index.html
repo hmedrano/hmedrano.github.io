@@ -197,6 +197,21 @@
                                 <a class="function" href="#ERDDAP_Griddap.loadMetadata">loadMetadata</a>
                         </li>
                         <li>
+                                <a class="variable" href="#ERDDAP_Griddap.dimensions">dimensions</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ERDDAP_Griddap.loadDimensionValues">loadDimensionValues</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ERDDAP_Griddap.getxArray">getxArray</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ERDDAP_Griddap.getncDataset">getncDataset</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ERDDAP_Griddap.getDataRequestURL">getDataRequestURL</a>
+                        </li>
+                        <li>
                                 <a class="variable" href="#ERDDAP_Griddap.xarray">xarray</a>
                         </li>
                         <li>
@@ -282,7 +297,7 @@ erddapClient    </h1>
     <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;__version&#39;</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">req</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="p">)</span>
+                <span class="n">req</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="p">)</span>
                 <span class="n">__version</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">text</span>
                 <span class="n">__version</span> <span class="o">=</span> <span class="n">__version</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
@@ -293,7 +308,7 @@ erddapClient    </h1>
     <span class="k">def</span> <span class="nf">version_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;__version_string&#39;</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                 <span class="n">req</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="s1">&#39;version_string&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="p">)</span>
+                 <span class="n">req</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="s1">&#39;version_string&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="p">)</span>
                  <span class="n">__version_string</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">text</span>
                  <span class="n">__version_string</span> <span class="o">=</span> <span class="n">__version_string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
@@ -407,7 +422,7 @@ erddapClient    </h1>
 <span class="sd">        Returns a string with the url search request.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">searchAPIEndpoint</span> <span class="o">=</span> <span class="s2">&quot;search/index.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filetype</span><span class="p">)</span>
-        <span class="n">searchAPIURL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="n">searchAPIEndpoint</span> <span class="p">)</span> 
+        <span class="n">searchAPIURL</span> <span class="o">=</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="n">searchAPIEndpoint</span> <span class="p">)</span> 
 
         <span class="n">queryElementsDefaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;page&#39;</span>          <span class="p">:</span> <span class="mi">1</span> <span class="p">,</span>
                                   <span class="s1">&#39;itemsPerPage&#39;</span>  <span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
@@ -586,7 +601,7 @@ erddapClient    </h1>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">searchAPIEndpoint</span> <span class="o">=</span> <span class="s2">&quot;search/advanced.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filetype</span><span class="p">)</span>
-        <span class="n">searchAPIURL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="n">searchAPIEndpoint</span> <span class="p">)</span>
+        <span class="n">searchAPIURL</span> <span class="o">=</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="n">searchAPIEndpoint</span> <span class="p">)</span>
 
         <span class="n">queryElementsDefaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;page&#39;</span>          <span class="p">:</span> <span class="mi">1</span> <span class="p">,</span>
                                   <span class="s1">&#39;itemsPerPage&#39;</span>  <span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
@@ -609,7 +624,6 @@ erddapClient    </h1>
 
         <span class="k">for</span> <span class="n">queryElement</span><span class="p">,</span> <span class="n">queryElementDefault</span> <span class="ow">in</span> <span class="n">queryElementsDefaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                         
-            <span class="c1">#queryValue = eval(queryElement) if eval(queryElement) else queryElementDefault</span>
             <span class="n">queryValue</span> <span class="o">=</span> <span class="n">searchFilters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">queryElement</span><span class="p">,</span> <span class="n">queryElementDefault</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">queryElement</span> <span class="o">==</span> <span class="s1">&#39;searchFor&#39;</span><span class="p">:</span>
@@ -626,7 +640,6 @@ erddapClient    </h1>
                 <span class="n">queryURL</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">queryElement</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">queryValue</span><span class="p">)</span> <span class="p">)</span>
         
         <span class="k">return</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">joinURLElements</span><span class="p">(</span><span class="n">searchAPIURL</span><span class="p">,</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">parseQueryItems</span><span class="p">(</span><span class="n">queryURL</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="s1">&#39;=+-&amp;&#39;</span><span class="p">))</span>
-        <span class="c1">#return searchAPIURL + &quot;?&quot; + &quot;&amp;&quot;.join(queryURL)</span>
 
 
     <span class="k">def</span> <span class="nf">getQueryAllDatasetsURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="p">[]):</span>
@@ -912,7 +925,7 @@ word. For example, to find datasets from a specific website
 <span class="sd">        Returns a string with the url search request.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">searchAPIEndpoint</span> <span class="o">=</span> <span class="s2">&quot;search/index.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filetype</span><span class="p">)</span>
-        <span class="n">searchAPIURL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="n">searchAPIEndpoint</span> <span class="p">)</span> 
+        <span class="n">searchAPIURL</span> <span class="o">=</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="n">searchAPIEndpoint</span> <span class="p">)</span> 
 
         <span class="n">queryElementsDefaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;page&#39;</span>          <span class="p">:</span> <span class="mi">1</span> <span class="p">,</span>
                                   <span class="s1">&#39;itemsPerPage&#39;</span>  <span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
@@ -1243,7 +1256,7 @@ time bounds.</p>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">searchAPIEndpoint</span> <span class="o">=</span> <span class="s2">&quot;search/advanced.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filetype</span><span class="p">)</span>
-        <span class="n">searchAPIURL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="n">searchAPIEndpoint</span> <span class="p">)</span>
+        <span class="n">searchAPIURL</span> <span class="o">=</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">serverURL</span><span class="p">,</span> <span class="n">searchAPIEndpoint</span> <span class="p">)</span>
 
         <span class="n">queryElementsDefaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;page&#39;</span>          <span class="p">:</span> <span class="mi">1</span> <span class="p">,</span>
                                   <span class="s1">&#39;itemsPerPage&#39;</span>  <span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
@@ -1266,7 +1279,6 @@ time bounds.</p>
 
         <span class="k">for</span> <span class="n">queryElement</span><span class="p">,</span> <span class="n">queryElementDefault</span> <span class="ow">in</span> <span class="n">queryElementsDefaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                         
-            <span class="c1">#queryValue = eval(queryElement) if eval(queryElement) else queryElementDefault</span>
             <span class="n">queryValue</span> <span class="o">=</span> <span class="n">searchFilters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">queryElement</span><span class="p">,</span> <span class="n">queryElementDefault</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">queryElement</span> <span class="o">==</span> <span class="s1">&#39;searchFor&#39;</span><span class="p">:</span>
@@ -1591,9 +1603,9 @@ Tabledap Dataset from ERDDAP. </p>
 
   <span class="k">def</span> <span class="nf">getBaseURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="n">DEFAULT_FILETYPE</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">filetype</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;opendap&#39;</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">)</span>
+      <span class="k">return</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
+      <span class="k">return</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
     
 
   <span class="k">def</span> <span class="nf">getAttribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">variableName</span><span class="o">=</span><span class="s1">&#39;NC_GLOBAL&#39;</span><span class="p">):</span>
@@ -1614,12 +1626,17 @@ Tabledap Dataset from ERDDAP. </p>
             <span class="k">return</span> <span class="n">vd</span><span class="p">[</span><span class="n">variableName</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span>
 
 
-  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads in to memory the metadata atributes and values available in the info</span>
 <span class="sd">    page of the dataset.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `force` : If true, this method will reload the metadata attributes</span>
+<span class="sd">    even if the information where already downloaded.    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
       <span class="n">rawRequest</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMetadataURL</span><span class="p">(),</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">)</span>
       <span class="n">rawRequestJson</span> <span class="o">=</span> <span class="n">rawRequest</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="o">=</span> <span class="n">parseDictMetadata</span><span class="p">(</span><span class="n">rawRequestJson</span><span class="p">)</span>
@@ -1627,14 +1644,17 @@ Tabledap Dataset from ERDDAP. </p>
       
   <span class="nd">@property</span>
   <span class="k">def</span> <span class="nf">variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span><span class="p">[</span><span class="s1">&#39;variables&#39;</span><span class="p">]</span>
 
   <span class="nd">@property</span>
   <span class="k">def</span> <span class="nf">dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span><span class="p">[</span><span class="s1">&#39;dimensions&#39;</span><span class="p">]</span>
 
   <span class="nd">@property</span>
   <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span><span class="p">[</span><span class="s1">&#39;global&#39;</span><span class="p">]</span>
 
 
@@ -1647,7 +1667,7 @@ Tabledap Dataset from ERDDAP. </p>
 <span class="sd">    `filetype` : The filetype for the metadata request, defaults to &#39;json&#39;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span> 
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">,</span> <span class="s2">&quot;index.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">,</span> <span class="s2">&quot;index.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
 
 
   <span class="k">def</span> <span class="nf">clearConstraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2063,9 +2083,9 @@ resultsVariables, constraints and operations provided.</p>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getBaseURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="n">DEFAULT_FILETYPE</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">filetype</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;opendap&#39;</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">)</span>
+      <span class="k">return</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
+      <span class="k">return</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
 </pre></div>
 
         </details>
@@ -2115,17 +2135,22 @@ function <code><a href="#ERDDAP_Dataset.loadMetadata">erddapClient.ERDDAP_Datase
 
         
             <span class="def">def</span>
-            <span class="name">loadMetadata</span><span class="signature">(self)</span>:
+            <span class="name">loadMetadata</span><span class="signature">(self, force=False)</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads in to memory the metadata atributes and values available in the info</span>
 <span class="sd">    page of the dataset.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `force` : If true, this method will reload the metadata attributes</span>
+<span class="sd">    even if the information where already downloaded.    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
       <span class="n">rawRequest</span> <span class="o">=</span> <span class="n">urlread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getMetadataURL</span><span class="p">(),</span> <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">)</span>
       <span class="n">rawRequestJson</span> <span class="o">=</span> <span class="n">rawRequest</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">__metadata</span> <span class="o">=</span> <span class="n">parseDictMetadata</span><span class="p">(</span><span class="n">rawRequestJson</span><span class="p">)</span>
@@ -2136,6 +2161,11 @@ function <code><a href="#ERDDAP_Dataset.loadMetadata">erddapClient.ERDDAP_Datase
 
             <div class="docstring"><p>Loads in to memory the metadata atributes and values available in the info
 page of the dataset.</p>
+
+<p>Arguments:</p>
+
+<p><code>force</code> : If true, this method will reload the metadata attributes
+even if the information where already downloaded.</p>
 </div>
 
 
@@ -2186,7 +2216,7 @@ page of the dataset.</p>
 <span class="sd">    `filetype` : The filetype for the metadata request, defaults to &#39;json&#39;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span> 
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">,</span> <span class="s2">&quot;index.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">url_join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">erddapurl</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasetid</span> <span class="p">,</span> <span class="s2">&quot;index.&quot;</span> <span class="o">+</span> <span class="n">filetype</span> <span class="p">)</span>
 </pre></div>
 
         </details>
@@ -2440,14 +2470,9 @@ method.</p>
     <span class="n">dst_repr_</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">dst_repr_</span> <span class="o">+</span> <span class="n">tabledap_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">():</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_castTimeVariable</span><span class="p">()</span>
-
-  <span class="k">def</span> <span class="nf">_castTimeVariable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">varName</span><span class="p">,</span> <span class="n">varAtts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-      <span class="k">if</span> <span class="s1">&#39;_CoordinateAxisType&#39;</span> <span class="ow">in</span> <span class="n">varAtts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;_CoordinateAxisType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Time&#39;</span><span class="p">:</span>
-        <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">castTimeRangeAttribute</span><span class="p">(</span><span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">],</span> <span class="n">varAtts</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">(</span><span class="n">force</span><span class="p">):</span>
+      <span class="n">parseTimeRangeAttributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
 
   <span class="c1"># </span>
@@ -2606,20 +2631,25 @@ the metadata information of the dataset.</p>
 
         
             <span class="def">def</span>
-            <span class="name">loadMetadata</span><span class="signature">(self)</span>:
+            <span class="name">loadMetadata</span><span class="signature">(self, force=False)</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">():</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_castTimeVariable</span><span class="p">()</span>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">(</span><span class="n">force</span><span class="p">):</span>
+      <span class="n">parseTimeRangeAttributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </pre></div>
 
         </details>
 
             <div class="docstring"><p>Loads in to memory the metadata atributes and values available in the info
 page of the dataset.</p>
+
+<p>Arguments:</p>
+
+<p><code>force</code> : If true, this method will reload the metadata attributes
+even if the information where already downloaded.</p>
 </div>
 
 
@@ -2968,29 +2998,238 @@ page of the dataset.</p>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ERDDAP_Griddap</span><span class="p">(</span><span class="n">ERDDAP_Dataset</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Class with the representation and methods for a ERDDAP Griddap Dataset</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
 
   <span class="n">DEFAULT_FILETYPE</span> <span class="o">=</span> <span class="s1">&#39;nc&#39;</span>
 
   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lazyload</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="s1">&#39;griddap&#39;</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">lazyload</span><span class="o">=</span><span class="n">lazyload</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__dimensions</span> <span class="o">=</span> <span class="kc">None</span>
 
   <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="n">dst_repr_</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">dst_repr_</span> <span class="o">+</span> <span class="n">griddap_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">():</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_castTimeDimension</span><span class="p">()</span>
+  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads in to memory the metadata atributes and values available in the info</span>
+<span class="sd">    page of the dataset.</span>
 
-  <span class="k">def</span> <span class="nf">_castTimeDimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">dimName</span><span class="p">,</span> <span class="n">dimAtts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-      <span class="k">if</span> <span class="s1">&#39;_CoordinateAxisType&#39;</span> <span class="ow">in</span> <span class="n">dimAtts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;_CoordinateAxisType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Time&#39;</span><span class="p">:</span>
-        <span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">castTimeRangeAttribute</span><span class="p">(</span><span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">],</span> <span class="n">dimAtts</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">])</span>
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `force` : If true, this method will reload the metadata attributes</span>
+<span class="sd">    even if the information where already downloaded.   </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">(</span><span class="n">force</span><span class="p">):</span>
+      <span class="n">parseTimeRangeAttributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ERDDAP_Dataset__metadata</span><span class="p">[</span><span class="s1">&#39;dimensions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">loadDimensionValues</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dimensions</span>
+
+
+  <span class="k">def</span> <span class="nf">loadDimensionValues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This methods loads from the ERDDAP Server the dimension values</span>
+<span class="sd">    for the current griddap dataset.  This values will be used to </span>
+<span class="sd">    calculate integer indexes for opendap requests.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `force` : If true, this method will reload the dimensions values</span>
+<span class="sd">    even if the values where already downloaded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dimensions</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">()</span>
+      <span class="n">dimensionVariableNames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ERDDAP_Dataset__metadata</span><span class="p">[</span><span class="s1">&#39;dimensions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+      <span class="n">_resultVars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span>
+      <span class="n">dimensionsData</span> <span class="o">=</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">setResultVariables</span><span class="p">(</span><span class="n">dimensionVariableNames</span><span class="p">)</span>
+                             <span class="o">.</span><span class="n">getDataFrame</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">dimensionVariableNames</span><span class="p">)</span>  <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span> <span class="o">=</span> <span class="n">_resultVars</span>
+      
+      <span class="bp">self</span><span class="o">.</span><span class="n">__dimensions</span> <span class="o">=</span> <span class="n">ERDDAP_Griddap_dimensions</span><span class="p">()</span>
+      <span class="k">for</span> <span class="n">dimName</span> <span class="ow">in</span> <span class="n">dimensionVariableNames</span><span class="p">:</span>
+        
+        <span class="n">dimDatadroppedNaNs</span> <span class="o">=</span> <span class="n">dimensionsData</span><span class="p">[</span><span class="n">dimName</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dimName</span> <span class="o">==</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span>
+          <span class="n">numericDates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">date2num</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">_dt</span><span class="p">,</span> <span class="n">ERDDAP_DATETIME_FORMAT</span><span class="p">),</span> <span class="n">ERDDAP_TIME_UNITS</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">_dt</span><span class="p">,</span><span class="nb">str</span><span class="p">))</span> <span class="k">else</span> <span class="n">_dt</span> <span class="k">for</span> <span class="n">_dt</span> <span class="ow">in</span> <span class="n">dimDatadroppedNaNs</span><span class="p">]</span> <span class="p">)</span>
+          <span class="n">dimensionSeries</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span> <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">numericDates</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">index</span> <span class="o">=</span> <span class="n">numericDates</span><span class="p">)</span>   
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">dimensionSeries</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span> <span class="n">data</span> <span class="o">=</span> <span class="n">dimDatadroppedNaNs</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">dimDatadroppedNaNs</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> 
+
+        <span class="n">dimMeta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ERDDAP_Dataset__metadata</span><span class="p">[</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">dimName</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dimensions</span><span class="p">[</span><span class="n">dimName</span><span class="p">]</span> <span class="o">=</span> <span class="n">ERDDAP_Griddap_dimension</span><span class="p">(</span><span class="n">dimName</span><span class="p">,</span> <span class="n">dimensionSeries</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">dimMeta</span><span class="p">)</span>       
+
+
+
+  <span class="k">def</span> <span class="nf">_convertERDDAPSubset2OpendapRegular</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resultVariables</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method will receive a string from the resultVariables part of the</span>
+<span class="sd">    ERDDAP griddap request like: </span>
+<span class="sd">     ssh[(2001-06-01T09:00:00Z):(2002-06-01T09:00:00Z)][0:(last-20.3)][last-20:1:last]</span>
+
+<span class="sd">    And will return the subset part, to the equivalent in integer indexes, </span>
+<span class="sd">     ssh[10:20][0:70.7][300:359]</span>
+<span class="sd">    </span>
+<span class="sd">    This operation is done by parsing the subset, obtaining the elements of the</span>
+<span class="sd">    slice that are erddap opendap extended format, the ones between ( ), and converting</span>
+<span class="sd">    the nearest integer index.</span>
+
+<span class="sd">    By parsing the subset, this function returns also error messages on a bad formed</span>
+<span class="sd">    query.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">queryComponents</span> <span class="o">=</span> <span class="n">parse_griddap_resultvariables_slices</span><span class="p">(</span><span class="n">resultVariables</span><span class="p">)</span>
+
+    <span class="n">parsedResultVariables</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">qIdx</span><span class="p">,</span> <span class="n">queryComponent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">queryComponents</span><span class="p">):</span>
+
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryComponent</span><span class="p">[</span><span class="s1">&#39;sliceComponents&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryComponent</span><span class="p">[</span><span class="s1">&#39;sliceComponents&#39;</span><span class="p">]):</span>        
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The subset request (</span><span class="si">{}</span><span class="s1">) must match the number of dimensions (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resultVariables</span><span class="p">[</span><span class="n">qIdx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="o">.</span><span class="n">ndims</span><span class="p">))</span>
+        
+      <span class="n">indexSlice</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;start&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+      <span class="n">indexSliceStr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+      <span class="k">for</span> <span class="n">dimOrder</span><span class="p">,</span> <span class="p">(</span><span class="n">dimensionName</span><span class="p">,</span> <span class="n">sliceComponent</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">queryComponent</span><span class="p">[</span><span class="s1">&#39;sliceComponents&#39;</span><span class="p">])):</span>
+        
+        <span class="c1"># Check if start of stop components of the slice is opendap extended format, </span>
+        <span class="c1"># The way to detect them is if they are between (dimValue) </span>
+        <span class="k">for</span> <span class="n">slicePart</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">]:</span>
+          <span class="k">if</span> <span class="n">slicePart</span> <span class="ow">in</span> <span class="n">sliceComponent</span> <span class="ow">and</span> <span class="n">is_slice_element_opendap_extended</span><span class="p">(</span><span class="n">sliceComponent</span><span class="p">[</span><span class="n">slicePart</span><span class="p">]):</span>
+            
+            <span class="n">sliceComponentValue</span> <span class="o">=</span> <span class="n">get_value_from_opendap_extended_slice_element</span><span class="p">(</span><span class="n">sliceComponent</span><span class="p">[</span><span class="n">slicePart</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">validate_iso8601</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">):</span>
+              <span class="n">sliceComponentValueNum</span> <span class="o">=</span> <span class="n">iso8601STRtoNum</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">)</span>
+              <span class="n">sliceComponentIdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="n">dimensionName</span><span class="p">]</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="n">sliceComponentValueNum</span><span class="p">)</span>
+              
+            <span class="k">elif</span> <span class="n">validate_float</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">):</span>
+              <span class="n">sliceComponentValue</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">)</span>
+              <span class="n">sliceComponentIdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="n">dimensionName</span><span class="p">]</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">validate_int</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">):</span>
+              <span class="n">sliceComponentValue</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">)</span>
+              <span class="n">sliceComponentIdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="n">dimensionName</span><span class="p">]</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">validate_last_keyword</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">):</span>
+              <span class="n">sliceComponentValue2Eval</span> <span class="o">=</span> <span class="n">sliceComponentValue</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;last&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="n">dimensionName</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+              <span class="n">sliceComponentIdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="n">dimensionName</span><span class="p">]</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">sliceComponentValue2Eval</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+              <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Malformed subset : (</span><span class="si">{}</span><span class="s1">) , couldn</span><span class="se">\&#39;</span><span class="s1">t parse: (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resultVariables</span><span class="p">[</span><span class="n">qIdx</span><span class="p">],</span> <span class="n">sliceComponentValue</span><span class="p">))</span>
+            
+          <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">slicePart</span> <span class="ow">in</span> <span class="n">sliceComponent</span><span class="p">:</span>
+              <span class="n">sliceComponentValue</span> <span class="o">=</span> <span class="n">sliceComponent</span><span class="p">[</span><span class="n">slicePart</span><span class="p">]</span>
+              <span class="k">if</span> <span class="n">validate_last_keyword</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">):</span>
+                <span class="n">sliceComponentValue2Eval</span> <span class="o">=</span> <span class="n">sliceComponentValue</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;last&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="n">dimensionName</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">sliceComponentIdx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">sliceComponentValue2Eval</span><span class="p">))</span>
+              <span class="k">else</span><span class="p">:</span>
+                <span class="n">sliceComponentIdx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliceComponentValue</span><span class="p">)</span>
+
+          <span class="k">if</span> <span class="n">sliceComponentIdx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Malformed subset : (</span><span class="si">{}</span><span class="s1">) , The constraint (</span><span class="si">{}</span><span class="s1">) is out of dimension range: [</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resultVariables</span><span class="p">[</span><span class="n">qIdx</span><span class="p">],</span> <span class="n">sliceComponentValue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="n">dimensionName</span><span class="p">]</span><span class="o">.</span><span class="n">range</span><span class="p">))</span>
+
+          <span class="n">indexSlice</span><span class="p">[</span><span class="n">slicePart</span><span class="p">]</span> <span class="o">=</span> <span class="n">sliceComponentIdx</span>
+        
+        <span class="c1">#endfor slicePart</span>
+        <span class="k">if</span> <span class="s1">&#39;stride&#39;</span> <span class="ow">in</span> <span class="n">sliceComponent</span><span class="p">:</span>
+          <span class="n">_indexSliceStr</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">%d</span><span class="s2">:</span><span class="si">%d</span><span class="s2">:</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">indexSlice</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">sliceComponent</span><span class="p">[</span><span class="s1">&#39;stride&#39;</span><span class="p">]),</span> <span class="n">indexSlice</span><span class="p">[</span><span class="s1">&#39;stop&#39;</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="s1">&#39;stop&#39;</span> <span class="ow">in</span> <span class="n">sliceComponent</span><span class="p">:</span>
+          <span class="n">_indexSliceStr</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">%d</span><span class="s2">:</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">indexSlice</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">],</span> <span class="n">indexSlice</span><span class="p">[</span><span class="s1">&#39;stop&#39;</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="s1">&#39;start&#39;</span> <span class="ow">in</span> <span class="n">sliceComponent</span><span class="p">:</span>
+          <span class="n">_indexSliceStr</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">indexSlice</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">_indexSliceStr</span> <span class="o">=</span>  <span class="s2">&quot;&quot;</span>
+        
+        <span class="n">indexSliceStr</span> <span class="o">+=</span> <span class="n">_indexSliceStr</span>
+
+      <span class="c1">#endfor dimension</span>
+      <span class="n">parsedResultVariables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">queryComponent</span><span class="p">[</span><span class="s1">&#39;variableName&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">indexSliceStr</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">parsedResultVariables</span>
+
+
+
+  <span class="k">def</span> <span class="nf">getxArray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an xarray object subset of the ERDDAP dataset</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    This method will pass all kwargs to the xarray.open_dataset method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subsetURL</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getDataRequestURL</span><span class="p">(</span><span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;opendap&#39;</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">:</span>
+      <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+      <span class="n">session</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span>
+      <span class="n">store</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">PydapDataStore</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">subsetURL</span><span class="p">,</span>
+                                              <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+      <span class="n">_xarray</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">_xarray</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">subsetURL</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_xarray</span>
+
+
+  <span class="k">def</span> <span class="nf">getncDataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an netCDF4.Dataset object subset of the ERDDAP dataset</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    This method will pass all kwargs to the netCDF4.Dataset method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subsetURL</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getDataRequestURL</span><span class="p">(</span><span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;opendap&#39;</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">:</span>
+      <span class="c1"># TODO Add user, password in URL</span>
+      <span class="n">_netcdf4Dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">subsetURL</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">_netcdf4Dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">subsetURL</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_netcdf4Dataset</span> 
+
+
+  <span class="k">def</span> <span class="nf">getDataRequestURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="n">DEFAULT_FILETYPE</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">resultVariables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the fully built ERDDAP data request url with the available components. </span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `filetype` : The request download format </span>
+
+<span class="sd">    `useSafeURL` : If True the query part of the url will be encoded</span>
+
+<span class="sd">    `resultVariables` : If None, the self.resultVariables will be used.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">requestURL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBaseURL</span><span class="p">(</span><span class="n">filetype</span><span class="p">)</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">resultVariables</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">resultVariables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span>
+
+    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s1">&#39;opendap&#39;</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">loadDimensionValues</span><span class="p">()</span>
+      <span class="n">resultVariables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convertERDDAPSubset2OpendapRegular</span><span class="p">(</span><span class="n">resultVariables</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">query</span> <span class="o">+=</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">parseQueryItems</span><span class="p">(</span><span class="n">resultVariables</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">item_separator</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+    <span class="n">requestURL</span> <span class="o">=</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">joinURLElements</span><span class="p">(</span><span class="n">requestURL</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">lastRequestURL</span> <span class="o">=</span> <span class="n">requestURL</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastRequestURL</span>
+        
+  
 
   <span class="nd">@property</span>
   <span class="k">def</span> <span class="nf">xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns the xarray object representation of the dataset. Ths method creates the</span>
+<span class="sd">    Returns the xarray object representation of the whoe dataset. Ths method creates the</span>
 <span class="sd">    xarray object by calling the open_dataset method and connecting to the </span>
 <span class="sd">    opendap endpoint that ERDDAP provides.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3008,13 +3247,13 @@ page of the dataset.</p>
   <span class="nd">@property</span>
   <span class="k">def</span> <span class="nf">ncDataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns the netCDF4.Dataset object representation of the dataset. Ths method</span>
+<span class="sd">    Returns the netCDF4.Dataset object representation of the whole dataset. Ths method</span>
 <span class="sd">    creates the Dataset object by calling the Dataset constructor connecting </span>
 <span class="sd">    to the opendap endpoint that ERDDAP provides.</span>
 <span class="sd">    &quot;&quot;&quot;</span>    
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;__netcdf4Dataset&#39;</span><span class="p">):</span>      
       <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">:</span>
-        <span class="c1"># Add user, password in URL</span>
+        <span class="c1"># TODO Add user, password in URL</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__netcdf4Dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getBaseURL</span><span class="p">(</span><span class="s1">&#39;opendap&#39;</span><span class="p">))</span>
       <span class="k">else</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__netcdf4Dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getBaseURL</span><span class="p">(</span><span class="s1">&#39;opendap&#39;</span><span class="p">))</span>
@@ -3023,8 +3262,7 @@ page of the dataset.</p>
 
         </details>
 
-            <div class="docstring"><p>Class to represent the shared attributes and methods of a ERDDAP Dataset
-either a griddap or tabledap.</p>
+            <div class="docstring"><p>Class with the representation and methods for a ERDDAP Griddap Dataset</p>
 </div>
 
 
@@ -3038,6 +3276,7 @@ either a griddap or tabledap.</p>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lazyload</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">datasetid</span><span class="p">,</span> <span class="s1">&#39;griddap&#39;</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">lazyload</span><span class="o">=</span><span class="n">lazyload</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__dimensions</span> <span class="o">=</span> <span class="kc">None</span>
 </pre></div>
 
         </details>
@@ -3059,20 +3298,239 @@ either a griddap or tabledap.</p>
 
         
             <span class="def">def</span>
-            <span class="name">loadMetadata</span><span class="signature">(self)</span>:
+            <span class="name">loadMetadata</span><span class="signature">(self, force=False)</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">():</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_castTimeDimension</span><span class="p">()</span>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads in to memory the metadata atributes and values available in the info</span>
+<span class="sd">    page of the dataset.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `force` : If true, this method will reload the metadata attributes</span>
+<span class="sd">    even if the information where already downloaded.   </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">(</span><span class="n">force</span><span class="p">):</span>
+      <span class="n">parseTimeRangeAttributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ERDDAP_Dataset__metadata</span><span class="p">[</span><span class="s1">&#39;dimensions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </pre></div>
 
         </details>
 
             <div class="docstring"><p>Loads in to memory the metadata atributes and values available in the info
 page of the dataset.</p>
+
+<p>Arguments:</p>
+
+<p><code>force</code> : If true, this method will reload the metadata attributes
+even if the information where already downloaded.</p>
+</div>
+
+
+                            </div>
+                            <div id="ERDDAP_Griddap.dimensions" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap.dimensions">#&nbsp;&nbsp</a>
+
+        <span class="name">dimensions</span>
+    </div>
+
+    
+
+                            </div>
+                            <div id="ERDDAP_Griddap.loadDimensionValues" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Griddap.loadDimensionValues">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">loadDimensionValues</span><span class="signature">(self, force=False)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">loadDimensionValues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This methods loads from the ERDDAP Server the dimension values</span>
+<span class="sd">    for the current griddap dataset.  This values will be used to </span>
+<span class="sd">    calculate integer indexes for opendap requests.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `force` : If true, this method will reload the dimensions values</span>
+<span class="sd">    even if the values where already downloaded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dimensions</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">loadMetadata</span><span class="p">()</span>
+      <span class="n">dimensionVariableNames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ERDDAP_Dataset__metadata</span><span class="p">[</span><span class="s1">&#39;dimensions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+      <span class="n">_resultVars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span>
+      <span class="n">dimensionsData</span> <span class="o">=</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">setResultVariables</span><span class="p">(</span><span class="n">dimensionVariableNames</span><span class="p">)</span>
+                             <span class="o">.</span><span class="n">getDataFrame</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">dimensionVariableNames</span><span class="p">)</span>  <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span> <span class="o">=</span> <span class="n">_resultVars</span>
+      
+      <span class="bp">self</span><span class="o">.</span><span class="n">__dimensions</span> <span class="o">=</span> <span class="n">ERDDAP_Griddap_dimensions</span><span class="p">()</span>
+      <span class="k">for</span> <span class="n">dimName</span> <span class="ow">in</span> <span class="n">dimensionVariableNames</span><span class="p">:</span>
+        
+        <span class="n">dimDatadroppedNaNs</span> <span class="o">=</span> <span class="n">dimensionsData</span><span class="p">[</span><span class="n">dimName</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dimName</span> <span class="o">==</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span>
+          <span class="n">numericDates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">date2num</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">_dt</span><span class="p">,</span> <span class="n">ERDDAP_DATETIME_FORMAT</span><span class="p">),</span> <span class="n">ERDDAP_TIME_UNITS</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">_dt</span><span class="p">,</span><span class="nb">str</span><span class="p">))</span> <span class="k">else</span> <span class="n">_dt</span> <span class="k">for</span> <span class="n">_dt</span> <span class="ow">in</span> <span class="n">dimDatadroppedNaNs</span><span class="p">]</span> <span class="p">)</span>
+          <span class="n">dimensionSeries</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span> <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">numericDates</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">index</span> <span class="o">=</span> <span class="n">numericDates</span><span class="p">)</span>   
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">dimensionSeries</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span> <span class="n">data</span> <span class="o">=</span> <span class="n">dimDatadroppedNaNs</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">dimDatadroppedNaNs</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> 
+
+        <span class="n">dimMeta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ERDDAP_Dataset__metadata</span><span class="p">[</span><span class="s1">&#39;dimensions&#39;</span><span class="p">][</span><span class="n">dimName</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dimensions</span><span class="p">[</span><span class="n">dimName</span><span class="p">]</span> <span class="o">=</span> <span class="n">ERDDAP_Griddap_dimension</span><span class="p">(</span><span class="n">dimName</span><span class="p">,</span> <span class="n">dimensionSeries</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">dimMeta</span><span class="p">)</span>       
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This methods loads from the ERDDAP Server the dimension values
+for the current griddap dataset.  This values will be used to 
+calculate integer indexes for opendap requests.</p>
+
+<p>Arguments:</p>
+
+<p><code>force</code> : If true, this method will reload the dimensions values
+even if the values where already downloaded.</p>
+</div>
+
+
+                            </div>
+                            <div id="ERDDAP_Griddap.getxArray" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Griddap.getxArray">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">getxArray</span><span class="signature">(self, **kwargs)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getxArray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an xarray object subset of the ERDDAP dataset</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    This method will pass all kwargs to the xarray.open_dataset method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subsetURL</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getDataRequestURL</span><span class="p">(</span><span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;opendap&#39;</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">:</span>
+      <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+      <span class="n">session</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span>
+      <span class="n">store</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">PydapDataStore</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">subsetURL</span><span class="p">,</span>
+                                              <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+      <span class="n">_xarray</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">_xarray</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">subsetURL</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_xarray</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Returns an xarray object subset of the ERDDAP dataset</p>
+
+<p>Arguments:</p>
+
+<p>This method will pass all kwargs to the xarray.open_dataset method.</p>
+</div>
+
+
+                            </div>
+                            <div id="ERDDAP_Griddap.getncDataset" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Griddap.getncDataset">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">getncDataset</span><span class="signature">(self, **kwargs)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getncDataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an netCDF4.Dataset object subset of the ERDDAP dataset</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    This method will pass all kwargs to the netCDF4.Dataset method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subsetURL</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getDataRequestURL</span><span class="p">(</span><span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;opendap&#39;</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">erddapauth</span><span class="p">:</span>
+      <span class="c1"># TODO Add user, password in URL</span>
+      <span class="n">_netcdf4Dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">subsetURL</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">_netcdf4Dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">subsetURL</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_netcdf4Dataset</span> 
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Returns an netCDF4.Dataset object subset of the ERDDAP dataset</p>
+
+<p>Arguments:</p>
+
+<p>This method will pass all kwargs to the netCDF4.Dataset method.</p>
+</div>
+
+
+                            </div>
+                            <div id="ERDDAP_Griddap.getDataRequestURL" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Griddap.getDataRequestURL">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">getDataRequestURL</span><span class="signature">(self, filetype=&#39;nc&#39;, useSafeURL=True, resultVariables=None)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">getDataRequestURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="o">=</span><span class="n">DEFAULT_FILETYPE</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">resultVariables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the fully built ERDDAP data request url with the available components. </span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `filetype` : The request download format </span>
+
+<span class="sd">    `useSafeURL` : If True the query part of the url will be encoded</span>
+
+<span class="sd">    `resultVariables` : If None, the self.resultVariables will be used.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">requestURL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBaseURL</span><span class="p">(</span><span class="n">filetype</span><span class="p">)</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">resultVariables</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">resultVariables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span>
+
+    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s1">&#39;opendap&#39;</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">loadDimensionValues</span><span class="p">()</span>
+      <span class="n">resultVariables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convertERDDAPSubset2OpendapRegular</span><span class="p">(</span><span class="n">resultVariables</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultVariables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">query</span> <span class="o">+=</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">parseQueryItems</span><span class="p">(</span><span class="n">resultVariables</span><span class="p">,</span> <span class="n">useSafeURL</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">item_separator</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+    <span class="n">requestURL</span> <span class="o">=</span> <span class="n">url_operations</span><span class="o">.</span><span class="n">joinURLElements</span><span class="p">(</span><span class="n">requestURL</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">lastRequestURL</span> <span class="o">=</span> <span class="n">requestURL</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lastRequestURL</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Returns the fully built ERDDAP data request url with the available components. </p>
+
+<p>Arguments:</p>
+
+<p><code>filetype</code> : The request download format </p>
+
+<p><code>useSafeURL</code> : If True the query part of the url will be encoded</p>
+
+<p><code>resultVariables</code> : If None, the self.resultVariables will be used.</p>
 </div>
 
 
@@ -3083,7 +3541,7 @@ page of the dataset.</p>
         <span class="name">xarray</span>
     </div>
 
-            <div class="docstring"><p>Returns the xarray object representation of the dataset. Ths method creates the
+            <div class="docstring"><p>Returns the xarray object representation of the whoe dataset. Ths method creates the
 xarray object by calling the open_dataset method and connecting to the 
 opendap endpoint that ERDDAP provides.</p>
 </div>
@@ -3096,7 +3554,7 @@ opendap endpoint that ERDDAP provides.</p>
         <span class="name">ncDataset</span>
     </div>
 
-            <div class="docstring"><p>Returns the netCDF4.Dataset object representation of the dataset. Ths method
+            <div class="docstring"><p>Returns the netCDF4.Dataset object representation of the whole dataset. Ths method
 creates the Dataset object by calling the Dataset constructor connecting 
 to the opendap endpoint that ERDDAP provides.</p>
 </div>
@@ -3113,12 +3571,10 @@ to the opendap endpoint that ERDDAP provides.</p>
                 <dd id="ERDDAP_Griddap.setConstraints" class="function">setConstraints</dd>
                 <dd id="ERDDAP_Griddap.addConstraints" class="function">addConstraints</dd>
                 <dd id="ERDDAP_Griddap.addConstraint" class="function">addConstraint</dd>
-                <dd id="ERDDAP_Griddap.getDataRequestURL" class="function">getDataRequestURL</dd>
                 <dd id="ERDDAP_Griddap.getURL" class="function">getURL</dd>
                 <dd id="ERDDAP_Griddap.getBaseURL" class="function">getBaseURL</dd>
                 <dd id="ERDDAP_Griddap.getAttribute" class="function">getAttribute</dd>
                 <dd id="ERDDAP_Griddap.variables" class="variable">variables</dd>
-                <dd id="ERDDAP_Griddap.dimensions" class="variable">dimensions</dd>
                 <dd id="ERDDAP_Griddap.info" class="variable">info</dd>
                 <dd id="ERDDAP_Griddap.getMetadataURL" class="function">getMetadataURL</dd>
                 <dd id="ERDDAP_Griddap.clearConstraints" class="function">clearConstraints</dd>
