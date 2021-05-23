@@ -247,6 +247,54 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="class" href="#ERDDAP_Griddap_dimensions">ERDDAP_Griddap_dimensions</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#ERDDAP_Griddap_dimensions.subsetI">subsetI</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ERDDAP_Griddap_dimensions.subset">subset</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ERDDAP_Griddap_dimensions.timeDimension">timeDimension</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ERDDAP_Griddap_dimensions.ndims">ndims</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#ERDDAP_Griddap_dimension">ERDDAP_Griddap_dimension</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#ERDDAP_Griddap_dimension.__init__">ERDDAP_Griddap_dimension</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ERDDAP_Griddap_dimension.closestIdx">closestIdx</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ERDDAP_Griddap_dimension.info">info</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ERDDAP_Griddap_dimension.data">data</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ERDDAP_Griddap_dimension.size">size</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ERDDAP_Griddap_dimension.timeData">timeData</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ERDDAP_Griddap_dimension.isTime">isTime</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#ERDDAP_Griddap_dimension.range">range</a>
+                        </li>
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -269,10 +317,11 @@ erddapClient    </h1>
 <span class="kn">from</span> <span class="nn">erddapClient.erddap_dataset</span> <span class="kn">import</span> <span class="n">ERDDAP_Dataset</span>
 <span class="kn">from</span> <span class="nn">erddapClient.erddap_tabledap</span> <span class="kn">import</span> <span class="n">ERDDAP_Tabledap</span>
 <span class="kn">from</span> <span class="nn">erddapClient.erddap_griddap</span> <span class="kn">import</span> <span class="n">ERDDAP_Griddap</span>
+<span class="kn">from</span> <span class="nn">erddapClient.erddap_griddap_dimensions</span> <span class="kn">import</span> <span class="n">ERDDAP_Griddap_dimensions</span><span class="p">,</span> <span class="n">ERDDAP_Griddap_dimension</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ERDDAP_Server&quot;</span><span class="p">,</span> <span class="s2">&quot;ERDDAP_Dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;ERDDAP_Tabledap&quot;</span><span class="p">,</span> <span class="s2">&quot;ERDDAP_Griddap&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ERDDAP_Server&quot;</span><span class="p">,</span> <span class="s2">&quot;ERDDAP_Dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;ERDDAP_Tabledap&quot;</span><span class="p">,</span> <span class="s2">&quot;ERDDAP_Griddap&quot;</span><span class="p">,</span> <span class="s2">&quot;ERDDAP_Griddap_dimensions&quot;</span><span class="p">,</span> <span class="s2">&quot;ERDDAP_Griddap_dimension&quot;</span><span class="p">]</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.0.10b&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.0&quot;</span>
 </pre></div>
 
         </details>
@@ -4069,6 +4118,608 @@ to the opendap endpoint that ERDDAP provides.</p>
 
             </div>
                                 </dl>
+                            </div>
+                </section>
+                <section id="ERDDAP_Griddap_dimensions">
+                                <div class="attr class">
+        <a class="headerlink" href="#ERDDAP_Griddap_dimensions">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">ERDDAP_Griddap_dimensions</span><wbr>(<span class="base">collections.OrderedDict</span>):
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ERDDAP_Griddap_dimensions</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Class with the representation and methods for a ERDDAP Griddap </span>
+<span class="sd">  dimensions variables</span>
+<span class="sd">  &quot;&quot;&quot;</span>    
+  <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">erddap_dimensions_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">val</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+
+  <span class="k">def</span> <span class="nf">subsetI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">pdims</span><span class="p">,</span> <span class="o">**</span><span class="n">kwdims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method receives slices with the numeric indexes for each dimension.</span>
+<span class="sd">    It will validate if the provided slices are valid and inside the dimension size, just to </span>
+<span class="sd">    warn and avoid further problems when requesting data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">parseSlice</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="n">dref</span><span class="p">):</span>
+      <span class="n">estart</span><span class="p">,</span> <span class="n">estop</span><span class="p">,</span> <span class="n">estep</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+      <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sobj</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">estart</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">estart</span> <span class="o">=</span> <span class="n">sobj</span><span class="o">.</span><span class="n">start</span>
+          <span class="k">if</span> <span class="n">estart</span> <span class="o">&gt;=</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;index </span><span class="si">{}</span><span class="s2"> its out of bounds for the dimensions </span><span class="si">{}</span><span class="s2"> with size </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">sobj</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">estop</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">estop</span> <span class="o">=</span> <span class="n">sobj</span><span class="o">.</span><span class="n">stop</span>
+          <span class="k">if</span> <span class="n">estop</span> <span class="o">&gt;</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;index stop </span><span class="si">{}</span><span class="s2"> its out of bounds for the dimensions </span><span class="si">{}</span><span class="s2"> with size </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+
+        <span class="n">estep</span> <span class="o">=</span> <span class="n">sobj</span><span class="o">.</span><span class="n">step</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">sobj</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+      <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span> 
+        <span class="n">estop</span> <span class="o">=</span> <span class="n">sobj</span>
+        <span class="k">if</span> <span class="n">estop</span> <span class="o">&gt;</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;index stop </span><span class="si">{}</span><span class="s2"> its out of bounds for the dimensions </span><span class="si">{}</span><span class="s2"> with size </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid slice format for dimension </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+      <span class="k">if</span> <span class="n">estart</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Deal the ugly case of -1 integer index. An aplied slice(-1) will return a empty subset.</span>
+        <span class="c1"># So set the slice.stop component to the size of the dimension.</span>
+        <span class="k">if</span> <span class="n">estop</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+          <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estop</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estop</span><span class="p">,</span> <span class="n">estop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estart</span><span class="p">,</span> <span class="n">estop</span> <span class="p">,</span> <span class="n">estep</span><span class="p">)</span>
+
+    <span class="n">validDimSlices</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span> <span class="p">{</span> <span class="n">k</span> <span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">}</span> <span class="p">)</span>
+    
+    <span class="c1"># Parse positional arguments, dimensions slices in order</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pdim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdims</span><span class="p">):</span>
+      <span class="n">validDimSlices</span><span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">parseSlice</span><span class="p">(</span><span class="n">pdim</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+    <span class="c1"># Parse keyword arguments, dimension names, order not important</span>
+    <span class="k">for</span> <span class="n">kdim</span><span class="p">,</span> <span class="n">vdim</span> <span class="ow">in</span> <span class="n">kwdims</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+      <span class="n">validDimSlices</span><span class="p">[</span><span class="n">kdim</span><span class="p">]</span> <span class="o">=</span> <span class="n">parseSlice</span><span class="p">(</span><span class="n">vdim</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">kdim</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">validDimSlices</span>
+
+
+  <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">pdims</span><span class="p">,</span> <span class="o">**</span><span class="n">kwdims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method receives slices for the dimensions, parses and returns the numeric</span>
+<span class="sd">    index values, in slice objects.</span>
+
+<span class="sd">    Usage example:</span>
+<span class="sd">    ```</span>
+<span class="sd">    iidx = dimensions.subset(slice(&quot;2014-06-15&quot;,&quot;2014-07-15&quot;), 0.0, slice(18.1,31.96), slice(-98, -76.41)) </span>
+<span class="sd">    # or </span>
+<span class="sd">    iidx = dimensions.subset(time=slice(&quot;2014-06-15&quot;,&quot;2014-07-15&quot;), depth=0.0, latitude=slice(18.1,31.96), longitude=slice(-98, -76.41)) </span>
+
+<span class="sd">    # Returns, the integer indexes for the closest inside values of the dimensions</span>
+
+<span class="sd">    { time : slice(0:10), depth : slice(0:1), latitude: slice(0:100), longitude : slice(0:200) }</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">parseSlice</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="n">dref</span><span class="p">):</span>
+      <span class="n">estart</span><span class="p">,</span> <span class="n">estop</span><span class="p">,</span> <span class="n">estep</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+      <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sobj</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">estart</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">estart</span> <span class="o">=</span> <span class="n">dref</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+          <span class="k">if</span> <span class="n">estart</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> its outside the dimensions values of </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">sobj</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">estop</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">estop</span> <span class="o">=</span> <span class="n">dref</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
+          <span class="k">if</span> <span class="n">estop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> its outside the dimensions values of </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="n">estep</span> <span class="o">=</span> <span class="n">sobj</span><span class="o">.</span><span class="n">step</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">sobj</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">estop</span> <span class="o">=</span> <span class="n">dref</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="n">sobj</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">estart</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estop</span><span class="p">,</span> <span class="n">estop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>     <span class="c1"># +1 to make it a valid integer index for python</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estart</span><span class="p">,</span> <span class="n">estop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">estep</span><span class="p">)</span>
+
+    <span class="c1">#   </span>
+    <span class="n">validDimSlices</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span> <span class="p">{</span> <span class="n">k</span> <span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">}</span> <span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pdim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdims</span><span class="p">):</span>
+      <span class="n">validDimSlices</span><span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">parseSlice</span><span class="p">(</span><span class="n">pdim</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">kdim</span><span class="p">,</span> <span class="n">vdim</span> <span class="ow">in</span> <span class="n">kwdims</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+      <span class="n">validDimSlices</span><span class="p">[</span><span class="n">kdim</span><span class="p">]</span> <span class="o">=</span> <span class="n">parseSlice</span><span class="p">(</span><span class="n">vdim</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">kdim</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">validDimSlices</span>
+
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">timeDimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="kc">None</span>
+
+
+  <span class="nd">@property</span> 
+  <span class="k">def</span> <span class="nf">ndims</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Class with the representation and methods for a ERDDAP Griddap 
+dimensions variables</p>
+</div>
+
+
+                            <div id="ERDDAP_Griddap_dimensions.subsetI" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Griddap_dimensions.subsetI">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">subsetI</span><span class="signature">(self, *pdims, **kwdims)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">subsetI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">pdims</span><span class="p">,</span> <span class="o">**</span><span class="n">kwdims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method receives slices with the numeric indexes for each dimension.</span>
+<span class="sd">    It will validate if the provided slices are valid and inside the dimension size, just to </span>
+<span class="sd">    warn and avoid further problems when requesting data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">parseSlice</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="n">dref</span><span class="p">):</span>
+      <span class="n">estart</span><span class="p">,</span> <span class="n">estop</span><span class="p">,</span> <span class="n">estep</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+      <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sobj</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">estart</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">estart</span> <span class="o">=</span> <span class="n">sobj</span><span class="o">.</span><span class="n">start</span>
+          <span class="k">if</span> <span class="n">estart</span> <span class="o">&gt;=</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;index </span><span class="si">{}</span><span class="s2"> its out of bounds for the dimensions </span><span class="si">{}</span><span class="s2"> with size </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">sobj</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">estop</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">estop</span> <span class="o">=</span> <span class="n">sobj</span><span class="o">.</span><span class="n">stop</span>
+          <span class="k">if</span> <span class="n">estop</span> <span class="o">&gt;</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;index stop </span><span class="si">{}</span><span class="s2"> its out of bounds for the dimensions </span><span class="si">{}</span><span class="s2"> with size </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+
+        <span class="n">estep</span> <span class="o">=</span> <span class="n">sobj</span><span class="o">.</span><span class="n">step</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">sobj</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+      <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span> 
+        <span class="n">estop</span> <span class="o">=</span> <span class="n">sobj</span>
+        <span class="k">if</span> <span class="n">estop</span> <span class="o">&gt;</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;index stop </span><span class="si">{}</span><span class="s2"> its out of bounds for the dimensions </span><span class="si">{}</span><span class="s2"> with size </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid slice format for dimension </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+      <span class="k">if</span> <span class="n">estart</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Deal the ugly case of -1 integer index. An aplied slice(-1) will return a empty subset.</span>
+        <span class="c1"># So set the slice.stop component to the size of the dimension.</span>
+        <span class="k">if</span> <span class="n">estop</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+          <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estop</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estop</span><span class="p">,</span> <span class="n">estop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estart</span><span class="p">,</span> <span class="n">estop</span> <span class="p">,</span> <span class="n">estep</span><span class="p">)</span>
+
+    <span class="n">validDimSlices</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span> <span class="p">{</span> <span class="n">k</span> <span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">}</span> <span class="p">)</span>
+    
+    <span class="c1"># Parse positional arguments, dimensions slices in order</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pdim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdims</span><span class="p">):</span>
+      <span class="n">validDimSlices</span><span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">parseSlice</span><span class="p">(</span><span class="n">pdim</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+    <span class="c1"># Parse keyword arguments, dimension names, order not important</span>
+    <span class="k">for</span> <span class="n">kdim</span><span class="p">,</span> <span class="n">vdim</span> <span class="ow">in</span> <span class="n">kwdims</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+      <span class="n">validDimSlices</span><span class="p">[</span><span class="n">kdim</span><span class="p">]</span> <span class="o">=</span> <span class="n">parseSlice</span><span class="p">(</span><span class="n">vdim</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">kdim</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">validDimSlices</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This method receives slices with the numeric indexes for each dimension.
+It will validate if the provided slices are valid and inside the dimension size, just to 
+warn and avoid further problems when requesting data.</p>
+</div>
+
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimensions.subset" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Griddap_dimensions.subset">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">subset</span><span class="signature">(self, *pdims, **kwdims)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">pdims</span><span class="p">,</span> <span class="o">**</span><span class="n">kwdims</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method receives slices for the dimensions, parses and returns the numeric</span>
+<span class="sd">    index values, in slice objects.</span>
+
+<span class="sd">    Usage example:</span>
+<span class="sd">    ```</span>
+<span class="sd">    iidx = dimensions.subset(slice(&quot;2014-06-15&quot;,&quot;2014-07-15&quot;), 0.0, slice(18.1,31.96), slice(-98, -76.41)) </span>
+<span class="sd">    # or </span>
+<span class="sd">    iidx = dimensions.subset(time=slice(&quot;2014-06-15&quot;,&quot;2014-07-15&quot;), depth=0.0, latitude=slice(18.1,31.96), longitude=slice(-98, -76.41)) </span>
+
+<span class="sd">    # Returns, the integer indexes for the closest inside values of the dimensions</span>
+
+<span class="sd">    { time : slice(0:10), depth : slice(0:1), latitude: slice(0:100), longitude : slice(0:200) }</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">parseSlice</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="n">dref</span><span class="p">):</span>
+      <span class="n">estart</span><span class="p">,</span> <span class="n">estop</span><span class="p">,</span> <span class="n">estep</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+      <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sobj</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sobj</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">estart</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">estart</span> <span class="o">=</span> <span class="n">dref</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+          <span class="k">if</span> <span class="n">estart</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> its outside the dimensions values of </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">sobj</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">estop</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">estop</span> <span class="o">=</span> <span class="n">dref</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
+          <span class="k">if</span> <span class="n">estop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> its outside the dimensions values of </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sobj</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">dref</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="n">estep</span> <span class="o">=</span> <span class="n">sobj</span><span class="o">.</span><span class="n">step</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">sobj</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">estop</span> <span class="o">=</span> <span class="n">dref</span><span class="o">.</span><span class="n">closestIdx</span><span class="p">(</span><span class="n">sobj</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">estart</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estop</span><span class="p">,</span> <span class="n">estop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>     <span class="c1"># +1 to make it a valid integer index for python</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">estart</span><span class="p">,</span> <span class="n">estop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">estep</span><span class="p">)</span>
+
+    <span class="c1">#   </span>
+    <span class="n">validDimSlices</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span> <span class="p">{</span> <span class="n">k</span> <span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">}</span> <span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pdim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdims</span><span class="p">):</span>
+      <span class="n">validDimSlices</span><span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">parseSlice</span><span class="p">(</span><span class="n">pdim</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">kdim</span><span class="p">,</span> <span class="n">vdim</span> <span class="ow">in</span> <span class="n">kwdims</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+      <span class="n">validDimSlices</span><span class="p">[</span><span class="n">kdim</span><span class="p">]</span> <span class="o">=</span> <span class="n">parseSlice</span><span class="p">(</span><span class="n">vdim</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">kdim</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">validDimSlices</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This method receives slices for the dimensions, parses and returns the numeric
+index values, in slice objects.</p>
+
+<p>Usage example:</p>
+
+<pre><code>iidx = dimensions.subset(slice("2014-06-15","2014-07-15"), 0.0, slice(18.1,31.96), slice(-98, -76.41)) 
+# or 
+iidx = dimensions.subset(time=slice("2014-06-15","2014-07-15"), depth=0.0, latitude=slice(18.1,31.96), longitude=slice(-98, -76.41)) 
+
+# Returns, the integer indexes for the closest inside values of the dimensions
+
+{ time : slice(0:10), depth : slice(0:1), latitude: slice(0:100), longitude : slice(0:200) }
+</code></pre>
+</div>
+
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimensions.timeDimension" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap_dimensions.timeDimension">#&nbsp;&nbsp</a>
+
+        <span class="name">timeDimension</span>
+    </div>
+
+    
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimensions.ndims" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap_dimensions.ndims">#&nbsp;&nbsp</a>
+
+        <span class="name">ndims</span>
+    </div>
+
+    
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>collections.OrderedDict</dt>
+                                <dd id="ERDDAP_Griddap_dimensions.__init__" class="function">OrderedDict</dd>
+                <dd id="ERDDAP_Griddap_dimensions.clear" class="function">clear</dd>
+                <dd id="ERDDAP_Griddap_dimensions.popitem" class="function">popitem</dd>
+                <dd id="ERDDAP_Griddap_dimensions.move_to_end" class="function">move_to_end</dd>
+                <dd id="ERDDAP_Griddap_dimensions.keys" class="function">keys</dd>
+                <dd id="ERDDAP_Griddap_dimensions.items" class="function">items</dd>
+                <dd id="ERDDAP_Griddap_dimensions.values" class="function">values</dd>
+                <dd id="ERDDAP_Griddap_dimensions.pop" class="function">pop</dd>
+                <dd id="ERDDAP_Griddap_dimensions.setdefault" class="function">setdefault</dd>
+                <dd id="ERDDAP_Griddap_dimensions.copy" class="function">copy</dd>
+                <dd id="ERDDAP_Griddap_dimensions.fromkeys" class="function">fromkeys</dd>
+                <dd id="ERDDAP_Griddap_dimensions.update" class="function">update</dd>
+
+            </div>
+            <div><dt>builtins.dict</dt>
+                                <dd id="ERDDAP_Griddap_dimensions.get" class="function">get</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="ERDDAP_Griddap_dimension">
+                                <div class="attr class">
+        <a class="headerlink" href="#ERDDAP_Griddap_dimension">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">ERDDAP_Griddap_dimension</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ERDDAP_Griddap_dimension</span><span class="p">:</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Class with the representation and methods for each ERDDAP Griddap </span>
+<span class="sd">  dimension, for its metadata and values</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>  
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">values</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+  <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">val</span><span class="p">]</span>
+
+  <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">erddap_dimension_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">closestIdx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the integer index that matches the closest &#39;value&#39; in </span>
+<span class="sd">    dimensions values.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `value` : The value to search in the dimension values.  If the object</span>
+<span class="sd">    contains a time dimension, this parameter can be a valid ISO 86091 string</span>
+<span class="sd">    or datetime.</span>
+
+<span class="sd">    `method` : The argument passed to pandas index.get_loc method</span>
+<span class="sd">    that returns the closest value index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isTime</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+      <span class="n">value</span> <span class="o">=</span> <span class="n">iso8601STRtoNum</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+      <span class="n">value</span> <span class="o">=</span> <span class="n">dttonum</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isTime</span><span class="p">:</span>
+      <span class="n">rangemin</span> <span class="o">=</span> <span class="n">dttonum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+      <span class="n">rangemax</span> <span class="o">=</span> <span class="n">dttonum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">rangemin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">rangemax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">rangemax</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">rangemin</span><span class="p">:</span>
+      <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">idx</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the dimension values</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">index</span>
+  
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns dimension lenght</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">size</span>
+  
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">timeData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isTime</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">numtodate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">isTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;time&#39;</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;actual_range&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">(</span><span class="n">numtodate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="n">numtodate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Class with the representation and methods for each ERDDAP Griddap 
+dimension, for its metadata and values</p>
+</div>
+
+
+                            <div id="ERDDAP_Griddap_dimension.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Griddap_dimension.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">ERDDAP_Griddap_dimension</span><span class="signature">(name, values, metadata)</span>
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">values</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimension.closestIdx" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ERDDAP_Griddap_dimension.closestIdx">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">closestIdx</span><span class="signature">(self, value, method=&#39;nearest&#39;)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>  <span class="k">def</span> <span class="nf">closestIdx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the integer index that matches the closest &#39;value&#39; in </span>
+<span class="sd">    dimensions values.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">    `value` : The value to search in the dimension values.  If the object</span>
+<span class="sd">    contains a time dimension, this parameter can be a valid ISO 86091 string</span>
+<span class="sd">    or datetime.</span>
+
+<span class="sd">    `method` : The argument passed to pandas index.get_loc method</span>
+<span class="sd">    that returns the closest value index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isTime</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+      <span class="n">value</span> <span class="o">=</span> <span class="n">iso8601STRtoNum</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+      <span class="n">value</span> <span class="o">=</span> <span class="n">dttonum</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isTime</span><span class="p">:</span>
+      <span class="n">rangemin</span> <span class="o">=</span> <span class="n">dttonum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+      <span class="n">rangemax</span> <span class="o">=</span> <span class="n">dttonum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">rangemin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">rangemax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;actual_range&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">rangemax</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">rangemin</span><span class="p">:</span>
+      <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">idx</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Returns the integer index that matches the closest 'value' in 
+dimensions values.</p>
+
+<p>Arguments:</p>
+
+<p><code>value</code> : The value to search in the dimension values.  If the object
+contains a time dimension, this parameter can be a valid ISO 86091 string
+or datetime.</p>
+
+<p><code>method</code> : The argument passed to pandas index.get_loc method
+that returns the closest value index.</p>
+</div>
+
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimension.info" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap_dimension.info">#&nbsp;&nbsp</a>
+
+        <span class="name">info</span>
+    </div>
+
+    
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimension.data" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap_dimension.data">#&nbsp;&nbsp</a>
+
+        <span class="name">data</span>
+    </div>
+
+            <div class="docstring"><p>Returns the dimension values</p>
+</div>
+
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimension.size" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap_dimension.size">#&nbsp;&nbsp</a>
+
+        <span class="name">size</span>
+    </div>
+
+            <div class="docstring"><p>Returns dimension lenght</p>
+</div>
+
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimension.timeData" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap_dimension.timeData">#&nbsp;&nbsp</a>
+
+        <span class="name">timeData</span>
+    </div>
+
+    
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimension.isTime" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap_dimension.isTime">#&nbsp;&nbsp</a>
+
+        <span class="name">isTime</span>
+    </div>
+
+    
+
+                            </div>
+                            <div id="ERDDAP_Griddap_dimension.range" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#ERDDAP_Griddap_dimension.range">#&nbsp;&nbsp</a>
+
+        <span class="name">range</span>
+    </div>
+
+    
+
                             </div>
                 </section>
     </main>
